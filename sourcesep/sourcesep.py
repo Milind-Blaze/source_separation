@@ -49,4 +49,16 @@ def divfind(V,r,numiter,toprint):
             cost.append(divcost(V,np.dot(W,H)))
             print("cost after " +str(i) + " iterations: " + str(cost[-1]) )
     return (W,H,cost)
+
+def SNR(A, B):
+    # A is the original magnitude spectrogram 
+    # B is the reconstructed magnitude spectrogram
+    # unlikely that they will ever be vectors 
+    if A.ndim == 1:
+        A = A[:, np.newaxis]
+    if B.ndim == 1:
+        B = B[:, np.newaxis]
+    numer = np.sum(A**2)
+    denom = np.sum((A - B)**2)
+    return numer/denom
   
