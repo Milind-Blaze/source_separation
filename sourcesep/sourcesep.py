@@ -1,4 +1,7 @@
 import numpy as np
+import librosa
+import librosa.display
+from librosa.core import resample
 
 
 # Frobenius norm with square root
@@ -61,4 +64,9 @@ def SNR(A, B):
     numer = np.sum(A**2)
     denom = np.sum((A - B)**2)
     return numer/denom
-  
+ 
+def load_audio(fs_target, path_audio):
+    audio, fs = librosa.load(path_audio,sr = fs_target)
+    t = np.arange(len(audio))/fs_target
+    return audio, fs, t
+
