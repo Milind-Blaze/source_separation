@@ -14,6 +14,7 @@ def divcost(A,B):
 
   
 def lstfind(V,r,numiter,toprint):
+    np.random.seed(3)
     n= V.shape[0]
     m= V.shape[1]
     # initial scaling copied from scikit 
@@ -35,6 +36,7 @@ def lstfind(V,r,numiter,toprint):
     return (W,H,cost)
   
 def divfind(V,r,numiter,toprint):
+    np.random.seed(3)
     n= V.shape[0]
     m= V.shape[1]
     q= (V.mean())/r
@@ -69,4 +71,20 @@ def load_audio(fs_target, path_audio):
     audio, fs = librosa.load(path_audio,sr = fs_target)
     t = np.arange(len(audio))/fs_target
     return audio, fs, t
+
+def virtanen007_loss(X, B, G, alpha, beta):
+    """
+    Returns the loss function corresponding to KL divergence + alpha*sparseness + beta*temporal_continuity
+    """
+    epsilon1 = np.min(X[np.nonzero(X)])/1000
+    recon = np.dot(B,G)
+    epsilon2 = np.min(recon[np.nonzero(recon)])/1000
+    cr = divcost(X + epsilon1, recon + epsilon2)
+    gtj = G[:,1:]
+    gt_prevj = G[:,:-1]
+    sigmaj = np.sqrt(np.mean(G**2, axis = 1))
+    ct = np.sum(np.sum((gtj - gt_prevj)**2, axis = 1)/(sigmaj**2))
+    cs = np.sum(np.sum(np.abs(G), axis = 1)/sigmaj)
+    cost = cr + ct + cs
+    return cost
 
