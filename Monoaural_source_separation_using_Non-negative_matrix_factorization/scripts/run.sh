@@ -1,0 +1,1 @@
+python experiment1.py ../audios/orig4/ orig4 ../experiments/experiment1/ 7 10 10

@@ -200,7 +200,7 @@ def reconmag_r_components(B,G):
     return components
 
 
-def virtanen007_cluster(sources, components):
+def virtanen007_cluster_all(sources, components):
     """
     assign each component reconstructed to a source component by finding that source from sources which has 
     the highest SNR with the given component
@@ -231,3 +231,20 @@ def virtanen007_cluster(sources, components):
         allocation[assgn].append(component)
         
     return allocation
+
+
+
+def distortion_measure(orig, recon):
+    eps = np.finfo(np.float32).eps/10
+    orig = orig + eps
+    recon = recon + eps
+    mid = (orig/recon)**2 
+    midlog = np.log(1/mid)
+    return np.sum((mid - 1 + midlog))
+
+
+def virtanen007_cluster_max(sources, components):
+    """
+    assigns one component which produced max SNR to 
+    """
+    return
