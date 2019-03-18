@@ -1,1 +1,7 @@
-python experiment1.py ../audios/orig4/ orig4 ../experiments/experiment1/ 7 10 10
+python experiment1.py ../audios/orig4/ orig4 ../experiments/experiment1_4/ 40 0 0 --numiter 1000 
+python experiment1.py ../audios/orig4/ orig4 ../experiments/experiment1_5/ 40 0.1 0.1 --numiter 1000
+python experiment1.py ../audios/orig4/ orig4 ../experiments/experiment1_6/ 40 1 1 --numiter 1000
+python experiment1.py ../audios/orig4/ orig4 ../experiments/experiment1_7/ 40 10 10 --numiter 1000
+python experiment1.py ../audios/orig4/ orig4 ../experiments/experiment1_8/ 40 100 100 --numiter 1000
+python experiment1.py ../audios/orig4/ orig4 ../experiments/experiment1_9/ 40 100 10 --numiter 1000
+python experiment1.py ../audios/orig4/ orig4 ../experiments/experiment1_10/ 40 10 1 --numiter 1000

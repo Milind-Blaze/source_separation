@@ -13,45 +13,56 @@ def divcost(A,B):
     return np.sum(A*np.log(A/B))-np.sum(A)+np.sum(B)
 
   
-def lstfind(V,r,numiter,toprint):
+def lstfind(V,r,numiter,toprint = None):
     np.random.seed(3)
+    eps = np.finfo(np.float32).eps/10
+    V = V + eps
     n= V.shape[0]
     m= V.shape[1]
     # initial scaling copied from scikit 
     # implementation
     q= (V.mean())/r
-    W= q*np.random.random((n,r))
+    W= q*np.random.random((n,r)) 
     H= q*np.random.random((r,m))
     cost=[lstcost(V,np.dot(W,H))]
+
+    if toprint == None:
+        toprint = numiter + 1
+
     for i in range(1,numiter+1):
         W = W*(np.dot(V,H.T))/(np.dot(W,np.dot(H,H.T)))
     # TODO: remove the hnew?
         hnew= H*(np.dot(W.T,V))/(np.dot(W.T,np.dot(W,H)))
     # W is updated before H is and the new value is used    
         H= hnew.copy()
-        
+        cost.append(lstcost(V,np.dot(W,H)))
         if i%toprint==0:
-            cost.append(lstcost(V,np.dot(W,H)))
             print("cost after " +str(i) + " iterations: " + str(cost[-1]) )
     return (W,H,cost)
   
-def divfind(V,r,numiter,toprint):
+def divfind(V,r,numiter,toprint = None):
     np.random.seed(3)
     n= V.shape[0]
     m= V.shape[1]
     q= (V.mean())/r
     q=1
+    eps = np.finfo(np.float32).eps/10
+    V = V + eps
     W= q*np.random.random((n,r))
     H= q*np.random.random((r,m))
     cost=[divcost(V,np.dot(W,H))]
+
+    if toprint == None:
+        toprint = numiter + 1
+
     for i in range(1,numiter+1):
         W = W*(np.dot(V/np.dot(W,H),H.T))/(np.sum(H,axis=1,keepdims=True)).T
         H = H*(np.dot(W.T,V/np.dot(W,H)))/(np.sum(W,axis=0,keepdims=True)).T
         #wnew= W*(np.dot(V,H.T))/(np.dot(W,np.dot(H,H.T)))
         #H= hnew.copy()
         #W= wnew.copy()
+        cost.append(divcost(V,np.dot(W,H)))
         if i%toprint==0:
-            cost.append(divcost(V,np.dot(W,H)))
             print("cost after " +str(i) + " iterations: " + str(cost[-1]) )
     return (W,H,cost)
 
@@ -113,8 +124,8 @@ def virtanen007_find(X, r, alpha, beta, numiter, toprint= None):
     """
     np.random.seed(3)
     eps = np.finfo(np.float32).eps/10
-    print("small value being added to prevent nan: ",eps)
-    print("minimum value of input magnitude spectrogram: ", np.min(X[np.nonzero(X)]))
+    # print("small value being added to prevent nan: ",eps)
+    # print("minimum value of input magnitude spectrogram: ", np.min(X[np.nonzero(X)]))
     m = np.shape(X)[0]
     n = np.shape(X)[1]
     # initializing as gaussian noise 
@@ -175,14 +186,12 @@ def virtanen007_find(X, r, alpha, beta, numiter, toprint= None):
 
 def reconmag_r_components(B,G):
     """
-    Parameters
-    
+    Parameters:
     B : matrix (m x r) whose column vectors act as the basis vectors for the separated sources
     G : matrix (r x n) whose ij_th element corresponds to the gain of the ith component in the jth time frame
     
     
-    Return
-    
+    Return:
     components : list of the magnitude spectrograms of the separated components   
     
     """

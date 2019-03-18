@@ -63,6 +63,7 @@ def savefigure(title, xlabel, ylabel, Y, labels, x, path_save_dir):
 	path_save_fig = join(path_save_dir, title + ".png")
 	plt.savefig(path_save_fig)
 	print(title + ".png saved at " + path_save_fig)
+	plt.close()
 
 	return
 
@@ -83,6 +84,7 @@ parser.add_argument("expt_dir", help = "folder to store the plots generated, sep
 parser.add_argument("r", help = "number of components", type = int)
 parser.add_argument("alpha", help = "scaling of the temporal continuity cost", type = float)
 parser.add_argument("beta", help = "scaling of the sparseness cost", type = float)
+parser.add_argument("--numiter", default = 1000, help = "number of iterations of the update algorithm to run", type = int)
 parser.add_argument("--frame_size", default = 40e-3, help = "frame size in seconds", type = float)
 parser.add_argument("--overlap", default = 0.5, help = "fraction of overlap between successive frames", type = float)
 parser.add_argument("--window", default = "hann", help = "window to be used when extracting the stft")
@@ -95,6 +97,7 @@ audio_name = args.audio
 r = args.r
 alpha = args.alpha
 beta = args.beta
+numiter = args.numiter
 frame_size = args.frame_size
 overlap = args.overlap
 
@@ -142,3 +145,22 @@ for i in range(len(seppaths)):
 	savefigure(sepname[i], "time", "audio", [sepsource], [sepname[i]], t, path_expt_dir)
 
 print("\n")
+
+
+
+
+############################################### creating a readme  ##################################################
+
+path_readme = join(path_expt_dir, "readme.txt")
+f = open(path_readme, "w")
+f.write("Experiment file: " + sys.argv[0] + "\n")
+f.write("Audio file being separated: " +  audio_name + "\n")
+f.write("r (use varies, can be upper limit on or exactly the number of components): " + str(r) + "\n")
+f.write("alpha: " + str(alpha) + "\n")
+f.write("beta: " + str(beta) + "\n")
+f.write("numiter: " + str(numiter) + "\n")
+f.write("frame_size: " + str(frame_size) + "\n")
+f.write("overlap: " + str(overlap) + "\n")
+f.write("window: "+ args.window + "\n")
+f.write
+f.close() 
