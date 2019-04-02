@@ -310,6 +310,6 @@ for r in R:
 Y.append(snrs_over_r)
 print("\n")
 
-savefigure("Experiment 1: SNR with nubmer of components", "Number of components", "Average SNR over all sources", Y, labels, R, path_expt_dir)
+savefigure("Experiment 3: SNR with nubmer of components", "Number of components", "Average SNR over all sources", Y, labels, R, path_expt_dir)
 
 
