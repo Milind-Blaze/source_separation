@@ -30,7 +30,7 @@ from sklearn.decomposition import NMF
 # blah-blah/source_separation/examples,
 # blah-blah/source_separation/nmf,
 # TODO: (0) find a more scalable way for this
-sys.path.insert(0,"../../../source_separation/")
+sys.path.insert(0,"../../../../source_separation/")
 from sourcesep.sourcesep import *
 from tools.basic_functions import *
 import setup
