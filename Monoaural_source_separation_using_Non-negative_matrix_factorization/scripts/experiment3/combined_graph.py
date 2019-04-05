@@ -66,6 +66,7 @@ expts_paths = [join(path_experiment3_folder, name) for name in expts if name.end
 
 Y_final = [] # To draw combined plots
 SNR_mean = [] # To draw plots of average SNR vs time
+SNR_vars = [] # To draw pltos of average of SNR vs frame size
 labels_final = [] 
 times = [] # To store the frame size details for the X axis
 
@@ -88,6 +89,8 @@ for path in expts_paths:
 	
 	for i in range(len(Y)):
 		SNR_mean.append(np.mean(Y[i]))
+		SNR_vars.append(np.var(Y[i]))
+
 
 	labels_temp = [label + "_" + tag for label in labels]
 	labels_final.extend(labels_temp)
@@ -113,11 +116,14 @@ for path in expts_paths:
 # [snrmean_hannt1, snrmean_hammingt1, snrmean_blackmanharrist1, snrmeant_windowst1, snrmean_hannt2, snrmean_hammingt2,
 # snrmean_blackmanharrist2, snrmeant_windowst2, ... ]
 
+# SNR_vars = variances instead of means
+
 print(np.shape(Y_final), "Y_final")
 print(np.shape(labels_final), "labels_final")
 print(np.shape(SNR_mean), "SNR_mean")
-print(labels_final)
-print(SNR_mean)
+print(np.shape(SNR_vars), "SNR_vars")
+# print(labels_final)
+# print(SNR_mean)
 
 
 # Determining windows used
@@ -141,19 +147,24 @@ print(windows)
 # key - window used
 # value - [list of frame sizes used, list of average snr values]
 SNR_averages = {}
+SNR_variances = {}
 for window in windows:
 	SNR_averages_window = []
+	SNR_variances_window = []
 	frame_size_window = []
 	for i in range(len(labels_final)):
 		if labels_final[i].startswith(window):
 			SNR_averages_window.append(SNR_mean[i])
+			SNR_variances_window.append(SNR_vars[i])
 			tag = labels_final[i].rsplit("_",1)[-1]
 			time = float(tag[:-2])
 			frame_size_window.append(time)
 	window_info = [frame_size_window, SNR_averages_window]
+	window_info_vars = [frame_size_window, SNR_variances_window]
 	SNR_averages[window] = window_info
+	SNR_variances[window] = window_info_vars
 
-print(SNR_averages)
+# print(SNR_averages)
 
 
 # Creating a plot of SNR averages
@@ -170,18 +181,24 @@ for key in SNR_averages:
 	
 	if len(r_sorted) > len(R):
 		R = r_sorted
-
-print(R)
-# print(SNR_averages["Hann"][1])
-# print(SNR_averages["Hann"][0])
-
-# a,b = zip(*sorted(zip(SNR_averages["Hann"][0],SNR_averages["Hann"][1])))
-# print(a)
-# print(b)
 savefigure("Variation_of_SNR_with_windows", "frame size" , "average snr over sources and components", Y, labels, R, path_store)
 
 
-# Y_plots
+# Creating a plot of SNR variances
+labels = []
+Y = []
+R = []
+for key in SNR_variances:
+	print(key)
+	labels.append(key)
+	var = SNR_variances[key][1]
+	r = SNR_variances[key][0]
+	r_sorted, var_sorted = zip(*sorted(zip(r,var)))
+	Y.append(var_sorted)
+	
+	if len(r_sorted) > len(R):
+		R = r_sorted
+savefigure("Variance_of_SNR_with_windows", "frame size" , "average snr over sources and components", Y, labels, R, path_store)
 
 
 
