@@ -1,0 +1,4 @@
+orig4 7
+orig6 10
+orig17 9
+orig25 7

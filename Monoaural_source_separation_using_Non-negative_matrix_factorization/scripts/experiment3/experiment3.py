@@ -130,7 +130,7 @@ path_audio = join(path_material, audio_name + ".wav")
 audio, fs, t = load_audio(fs_target, path_audio)
 savefigure(audio_name, "time", "audio", [audio], [audio_name], t, path_expt_dir)
 
-audio_number = audio_name[-1]
+audio_number = audio_name.replace("orig", "")
 sepstart = "separated" + audio_number
 sepname = [name for name in listdir(path_material) if name.startswith(sepstart)]
 seppaths = [join(path_material, name) for name in sepname]

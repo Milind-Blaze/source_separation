@@ -1,3 +1,12 @@
+"""Combines the plots of a large set of experiments
+
+Reads in the data of the multiple experiments run. 
+Averages the SNR for a given setting of alpha, beta, num_iter and window over the number of components obtaining one value per frame size
+plots the average snr vs number frame size in seconds for different windows
+
+"""
+
+
 import argparse
 import os
 from os import listdir
@@ -48,17 +57,67 @@ def obtain_variables_from_pickle(path_pickle):
 	return Y, labels, R
 
 
+def savefigure1(title, xlabel, ylabel, Y, labels, x, path_save_dir, type = "linear"):
+    """
+    Function to create and save plots
+
+    Parameters:
+        title (string): title of the plot
+        xlabel (string): label of the x axis of the plot
+        ylabel (string): label of the y axis of the plot
+        Y (list): list of all the functions to be plotted on the Y axis
+        labels (list): list of plot names for the legend
+        x (array): array of the x axis values
+        path_save_fig (string): folder where the plot must be saved
+
+    """
+    plt.figure(figsize = (10,8))
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.grid(True)
+    plt.ylim((0,16))
+    if len(Y) != len(labels):
+        print("Number of labels and plots don't match!")
+        return
+
+    for i in range(len(Y)):
+        y = Y[i]
+        if type == "linear":
+            plt.plot(x, y, label = labels[i])
+        elif type == "semilogx":
+            plt.semilogx(x, y, label = labels[i])
+    plt.legend()
+    try:
+        os.mkdir(path_save_dir)
+        print("folder created at " + path_save_dir)
+    except FileExistsError:
+        print("folder already exists at " + path_save_dir)
+    path_save_fig = join(path_save_dir, title + ".png")
+    plt.savefig(path_save_fig)
+    print(title + ".png saved at " + path_save_fig)
+    plt.close()
+
+    return
+
+########################################### Parsing the arguments ###################################################
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--path_expt_folder", default = "../../experiments/experiment3/largescale/orig4", help = "folder for SNR variation with window size")
+parser.add_argument("--path_store", default = "../../experiments/experiment3/largescale/", help = "path where all the results of this script are stored")
+args = parser.parse_args()
 
 
 
 ############################################ Setting up local variables ##############################################
 
-path_experiment3_folder = "../../experiments/experiment3/largescale/" # folder for SNR variation with window size
-path_store = "../../experiments/experiment3/largescale/" # path where all the results of this script are stored
+path_experiment3_folder = args.path_expt_folder #"../../experiments/experiment3/largescale/" # folder for SNR variation with window size
+path_store = args.path_store #"../../experiments/experiment3/largescale/" # path where all the results of this script are stored
 
 
 expts = listdir(path_experiment3_folder)
 expts_paths = [join(path_experiment3_folder, name) for name in expts if name.endswith("ms")]
+audio_name = path_experiment3_folder.rsplit("/")[-1]
 # the experiment3.py must store all the folders with alpha, beta and numcomp specified in the title and must end with 
 # the framesize in ms: blah_blah_40ms
 
@@ -83,7 +142,9 @@ for path in expts_paths:
 			filepath = join(path, file)
 	Y, labels, R = obtain_variables_from_pickle(filepath)
 	title = "Experiment3_SNR_windows" + "_" + tag
-	savefigure(title, "Number of components", "Average of SNR over all sources", Y, labels, R, path_store)
+
+
+	savefigure1(title, "Number of components", "Average of SNR over all sources", Y, labels, R, path_store)
 	
 	Y_final.extend(Y)
 	
@@ -159,7 +220,10 @@ for window in windows:
 			tag = labels_final[i].rsplit("_",1)[-1]
 			time = float(tag[:-2])
 			frame_size_window.append(time)
-	window_info = [frame_size_window, SNR_averages_window]
+	
+	# sorting the frame sizes from the smallest to the largest
+	frame_size_window_sorted, SNR_averages_window_sorted = zip(*sorted(zip(frame_size_window, SNR_averages_window)))
+	window_info = [frame_size_window_sorted, SNR_averages_window_sorted]
 	window_info_vars = [frame_size_window, SNR_variances_window]
 	SNR_averages[window] = window_info
 	SNR_variances[window] = window_info_vars
@@ -167,21 +231,48 @@ for window in windows:
 # print(SNR_averages)
 
 
+# write this averages data to a folder for later use.
+# idea being:
+# Write the SNR averages file to one folder with the audio name in the pickle file name
+# EG. audioname_snraverages.pickle
+# reload this pickle file and multiply by the number of components from the text file 
+
+# audio_averages_folder = "averages" + audio_name + "_" + "SNR_averages.pickle"
+# # path is "blahblah/experiment3/largescale/"
+# path_audio_averages = join(path_store, audio_averages_folder)
+
+# with open(path_audio_averages, "wb") as handle:
+# 	pickle.dump(SNR_averages, handle, protocol = pickle.HIGHEST_PROTOCOL)
+
+
+
+
+################################################## Plotting #######################################
 # Creating a plot of SNR averages
 labels = []
 Y = []
 R = []
 for key in SNR_averages:
-	print(key)
-	labels.append(key)
-	average = SNR_averages[key][1]
-	r = SNR_averages[key][0]
-	r_sorted, average_sorted = zip(*sorted(zip(r,average)))
-	Y.append(average_sorted)
-	
-	if len(r_sorted) > len(R):
-		R = r_sorted
-savefigure("Variation_of_SNR_with_windows", "frame size" , "average snr over sources and components", Y, labels, R, path_store)
+	if key != "Chebyshev": # introduced because large scale experiment not conducted for chebyshev windows 
+		print(key)
+		labels.append(key)
+		average = SNR_averages[key][1]
+		r = SNR_averages[key][0]
+		r_sorted, average_sorted = zip(*sorted(zip(r,average)))
+		r_sorted, average_sorted = r, average
+		Y.append(average_sorted)
+		
+		if len(r_sorted) > len(R):
+			R = r_sorted
+
+# print(R)
+# print(np.shape(Y))
+# print(labels)
+
+savefigure1("Variation_of_SNR_with_windows", "frame size" , "average snr over sources and components", Y, labels, R, path_store)
+
+
+
 
 
 # Creating a plot of SNR variances
@@ -198,7 +289,7 @@ for key in SNR_variances:
 	
 	if len(r_sorted) > len(R):
 		R = r_sorted
-savefigure("Variance_of_SNR_with_windows", "frame size" , "average snr over sources and components", Y, labels, R, path_store)
+# savefigure("Variance_of_SNR_with_windows", "frame size" , "average snr over sources and components", Y, labels, R, path_store)
 
 
 
