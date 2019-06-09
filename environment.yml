@@ -1,4 +1,4 @@
-name: tf_clone
+name: source_separation
 channels:
   - defaults
 dependencies:
@@ -128,5 +128,5 @@ dependencies:
     - webencodings==0.5.1
     - werkzeug==0.14.1
     - widgetsnbextension==3.4.2
-#prefix: /home/milind/miniconda3/envs/tf
+
 
