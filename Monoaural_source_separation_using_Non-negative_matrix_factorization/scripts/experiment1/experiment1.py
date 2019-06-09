@@ -1,6 +1,6 @@
 """ Experiment 1: SNR variation with the number of components
 
-Varies number of components from number of sources present to 30 and plots the SNRs for three loss funcitons. NMF EUL, NMF LOG
+Varies number of components from number of sources present to 40 and plots the SNRs for three loss funcitons. NMF EUL, NMF LOG
 and Virtanen loss. 
 
 Requires argparse, os, librosa, matplotlib, numpy, scipy, scikit learn and the sourcesep.py file, tools.py file and setup.py file
