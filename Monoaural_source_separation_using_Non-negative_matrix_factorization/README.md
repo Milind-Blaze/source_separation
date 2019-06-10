@@ -5,7 +5,7 @@ This folder contains a rudimentary implementation of the algorithm presented in 
 
 ## Contents   
 
-```Monoaural_source_separation_Frobenius_norm.ipynb```: A jupyter notebook working with one of the audios made available by the author visualizing the audio, performing source separation with plain NMF and the algorithm proposed.
+```Monoaural_source_separation_Frobenius_norm.ipynb```: A jupyter notebook working with one of the audios made available by the author visualizing the audio, performing source separation with plain NMF and the algorithm proposed.      
 __scripts__: Folder containing the setup for the three experiments performed to evaluate the (relative) performance of the algorithms of interest for the task of source separation.    
 
 ## Useful links   
