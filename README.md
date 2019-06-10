@@ -22,6 +22,6 @@ and run the desired script as described.
             
 ## Directories:           
      
-__Monoaural_source_separation_using_Non-negative_matrix_factorization__: Code for source separation based on the technique described in the paper [Monaural Sound Source Separation by NonnegativeMatrix Factorization With Temporal Continuityand Sparseness Criteria](http://www.cs.tut.fi/sgn/arg/music/tuomasv/virtanen_taslp2007.pdf).        
+__Monoaural_source_separation_using_Non-negative_matrix_factorization__: Code for source separation based on the technique described in the paper [Monaural Sound Source Separation by NonnegativeMatrix Factorization With Temporal Continuity and Sparseness Criteria](http://www.cs.tut.fi/sgn/arg/music/tuomasv/virtanen_taslp2007.pdf).        
 __sourcesep__: Modules for all implemented source separation algorithms       
 __tools__: Modules for helper functions      
