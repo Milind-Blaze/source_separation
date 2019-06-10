@@ -22,13 +22,13 @@ beta: upper bound of the weights associated with the temporal continuity and spa
 
 __Note__: The alpha and beta above refer to the commandline arguements alpha and beta passed to the script and not to the weights of the temporal continuity and sparseness loss functions themselves. However, the alpha and beta might refer to the weights as well, for instance in the plots produced by the script. However, the distinction is fairly easy to make depending on the context and the user is encouraged to do the same.
 
-*Optional parameters*:
+*Optional parameters*:       
 --numiter: number of iterations of each algorithm to run (defautls to 1000)    
 --frame_size: frame size in s (defaults to 40e-3)    
 --overlap: fraction of overlap between successive frames (defautls to 0.5)        
 
 
-__Output__
+__Output__      
 Produces the following outputs at destination_folder:  
 - time domain plots of original mixture and separated component signals
 - plot of the variation of SNR with variation in the weight of the temporal continuity loss function alpha (see note above)     
