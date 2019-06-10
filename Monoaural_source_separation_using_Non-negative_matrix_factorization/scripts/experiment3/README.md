@@ -21,13 +21,13 @@ alpha: weight of the temporal continuity loss function
 beta: weight of the sparseness loss function     
 
 
-*Optional parameters*:
+*Optional parameters*:      
 --numiter: number of iterations of each algorithm to run (defautls to 1000)    
 --frame_size: frame size in s (defaults to 40e-3)    
 --overlap: fraction of overlap between successive frames (defautls to 0.5)        
 
 
-__Output__
+__Output__         
 Produces the following outputs at destination_folder:  
 - time domain plots of original mixture and separated component signals
 - plot of the variation of SNR with variation in the number of compoents for Hann, Hamming and Blackman-Harris windows     
