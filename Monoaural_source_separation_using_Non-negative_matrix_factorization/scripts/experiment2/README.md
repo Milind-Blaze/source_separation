@@ -42,7 +42,7 @@ A module that handles commandline parsing, audio loading and creation of the rea
 import setup
 ```     
 
-### run_expt1.sh   
+### run_expt2.sh   
 
 A script that executes multiple trials with different settings of parameters to determine under what conditions the given algorithm produces the best results for the given audio file and for the same variation of the weights alpha and beta. Commands for a few of the trials run are present in the script. To run the script, navigate to where the file is saved (using the terminal) and give it execute permission    
 ```

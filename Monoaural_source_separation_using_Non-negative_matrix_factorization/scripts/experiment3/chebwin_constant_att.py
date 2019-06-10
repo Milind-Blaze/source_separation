@@ -150,8 +150,7 @@ Y = []
 # TODO: (0) make this entirely dependent on command line
 labels = ["Chebyshev"]
 
-alpha = 10
-beta = 1
+
 
 # TODO: (0) Very brutal and no reuse of code between windows. Really needs to be fixed.
 

@@ -1,7 +1,6 @@
 """Experiment 3: variation of the SNR with the window function
 
-Varies number of components from number of sources present to the r value supplied in the command line and plots the SNRs for three loss funcitons. NMF EUL, NMF LOG
-and Virtanen loss. 
+Varies number of components from number of sources present to the r value supplied in the command line and plots the SNRs for Virtanen loss. 
 
 Requires argparse, os, librosa, matplotlib, numpy, scipy, scikit learn and the sourcesep.py file, tools.py file and setup.py file
 
@@ -150,8 +149,7 @@ Y = []
 # TODO: (0) make this entirely dependent on command line
 labels = ["Hann", "Hamming", "Blackman harris"]
 
-alpha = 10
-beta = 1
+
 
 # TODO: (0) Very brutal and no reuse of code between windows. Really needs to be fixed.
 
